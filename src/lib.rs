@@ -109,33 +109,6 @@ impl<'r> FromRequest<'r> for TracingSpan {
     }
 }
 
-#[derive(Serialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct OutputData<'a> {
-    pub message: &'a str,
-    pub request_id: String,
-}
-
-#[get("/abc")]
-pub async fn abc<'a>(
-    span: TracingSpan,
-    request_id: RequestId,
-) -> Result<Json<OutputData<'a>>, (Status, Json<OutputData<'a>>)> {
-    let entered = span.0.enter();
-    info!("Hello World");
-
-    let mock_data = OutputData {
-        message: "Hello World",
-        request_id: request_id.0,
-    };
-    span.0.record(
-        "output",
-        &serde_json::to_string(&mock_data).unwrap().as_str(),
-    );
-    drop(entered);
-    Err((Status::NotFound, Json(mock_data)))
-}
-
 // Logging
 
 use tracing_subscriber::field::MakeExt;
