@@ -1,5 +1,5 @@
 [package]
-name = "rocket-tracing-fairing-example"
+name = "tracing-fairing"
 version = "0.1.0"
 edition = "2021"
 
